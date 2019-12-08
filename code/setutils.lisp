@@ -1,16 +1,16 @@
 ;;
 ;;
-;; Set utilities for COGS 543
+;; Set utilities
 ;;
 ;; Umut Ozge -- tumuum@gmail.com
 ;;
 
-; (defpackage :setutils 
-;   (:use :common-lisp)
-;   (:nicknames :su)
-;   (:export :setp :random-pick :generate-tuples :set-to-function))
-; 
-; (in-package setutils)
+(defpackage :setutils 
+  (:use :common-lisp)
+  (:nicknames :su)
+  (:export :setp :random-pick :generate-tuples :set-to-function))
+
+(in-package setutils)
 
 (defun setp (lst)
   "test for sethood"

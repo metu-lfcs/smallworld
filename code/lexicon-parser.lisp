@@ -13,12 +13,11 @@
   (:nicknames :lp)
   (:export :run))
 
-(in-package lexicon-parser)
-
 (load "read-macros.lisp")
 (load "aux.lisp")
 (load "lalr.lisp")
 
+(in-package lexicon-parser)
 
 (defvar *lexicon-file-path*)
 (defvar *theory-file-path*)
@@ -107,8 +106,8 @@
   (labels ((lambda-p (expr)
 					 (and 
 					   (consp expr)
-					   (= (length expr) 2)
-					   (eq (car expr) 'lam)))
+					   (= (length expr) 3)
+					   (equal (car expr) 'lam)))
 		   (r-adjoin (expr adjunct)
 					 (if (null adjunct)
 					   expr
@@ -120,8 +119,8 @@
 						 nil)
 						((= 1 (length sem))
 						 (parse (car sem)))
-						((lambda-p (car sem))
-						 (list 'lam (cadr (car sem)) (parse (cdr sem))))
+						((lambda-p sem)
+						 (list 'lam (cadr sem) (parse (cddr sem))))
 						(t
 						  (r-adjoin
 							(list 

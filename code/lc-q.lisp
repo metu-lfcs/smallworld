@@ -10,11 +10,11 @@
 ;;; 
 
 
-(defpackage :lc-q 
-  (:use :common-lisp)
-  (:export :eta-normalize :beta-normalize-outer :beta-normalize-inner :mk-a))
-
-(in-package lc-q)
+; (defpackage :lc-q 
+;   (:use :common-lisp)
+;   (:export :eta-normalize :beta-normalize-outer :beta-normalize-inner :mk-a))
+; 
+; (in-package lc-q)
 
 
 ; The ADT for Expressions
@@ -70,7 +70,7 @@
 		((is-a e) (mk-a
 					(eta-normalize (a-get-f e))
 					(eta-normalize (a-get-a e))))
-		((is-l e) (eta-reduce (mk-l 
+		((is-l e)  (eta-reduce (mk-l 
 								(l-get-v e)
 								(eta-normalize (l-get-b e)))))))
 ;

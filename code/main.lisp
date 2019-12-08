@@ -9,31 +9,30 @@
 (defun proc-input (input)
   (case input
 	((:help :h)
-	 (funcall 'display-help))
-	((:quit :q) (princ "bye!") (terpri) (quit))
+	 (display-help))
+	((:quit :q) (princ "bye, come again!") (terpri) (quit))
 	((:refresh-model :rm)
 	 (format t "Generating a random model...~%")
-	 (funcall 'refresh-model))
+	 (funcall #'models:refresh-model))
 	((:show-model :sm)
-	 (funcall 'display-model))
+	 (models:display-model))
 	((:interp-form :if)
-	 (print (funcall 'interpret-form)) (terpri))
+	 (print (interpret-form)) (terpri))
 	((:show-vocab :sv)
 	 (print *vocab*) (terpri))
 	((:switch-eta :se)
 	 (princ (switch-eta-normalization)) (terpri))
 	((:parse :p)
-	 (terpri) (princ (funcall 'parse-expr)) (terpri) (terpri))
+	 (terpri) (princ (parse-expr)) (terpri) (terpri))
 	((:parse-file :pf)
-	 (funcall 'parse-file) (terpri))
+	 (parse-file) (terpri))
 	((:interp-exp :ie)
-	 (print (funcall 'interpret-expr)) (terpri) (terpri))
+	 (print (interpret-expr)) (terpri) (terpri))
 	(otherwise (princ "unknown command") (terpri))
 	))
 
 (defun interpret-form ()
-	(interpret (read)))
-
+	(models:interpret (read)))
 
 (defun parse-file (&optional fname)
   (let* ((filename (or fname (read-line)))
@@ -44,8 +43,7 @@
 						 :if-does-not-exist :create
 						 :if-exists :overwrite)
 	  (dolist (i sentences)
-		(format str (string-downcase "~{~A ~}~%~{~A~%~}~%~%") i (mapcar #'sign-sem (uniq-parses (parse-expr i)))))))) ; TODO can't display ambiguity
-
+		(format str (string-downcase "~{~A ~}~%~{~A~%~}~%~%") i (mapcar sign-sem (uniq-parses (parse-expr i)))))))) ; TODO can't display ambiguity
 
 (defun parse-expr (&optional sent)
   (let* ((sentence (or sent (aux:string-to-list (read-line))))
@@ -55,14 +53,14 @@
 	  (uniq-parses (parse sentence)))))
 
 (defun interpret-expr ()
-	(interpret (sign-sem (parse-expr))))
+	(models:interpret (sign-sem (parse-expr))))
 
 (defun display-help ()
   (format t "~%")
   (format t ":gen-model (:gm)		-- generate a random model~%")
   (format t ":show-model (:sm)		-- display the current loaded model~%")
   (format t ":refresh-model (:rm)		-- generate a new random model~%")
-  (format t ":parse-sent (:ps) <sentence>	-- parse the provided sentence into an applicative form~%")
+  (format t ":parse (:p) <sentence>	-- parse the provided sentence into an applicative form~%")
   (format t ":interp-form (:if) <form>	-- interpret the provided applicative form~%")
   (format t ":interp-exp (:is) <expr>	-- parse and interpret the provided expression~%")
   (format t ":show-vocab (:sv)		-- display the vocabulary~%")
@@ -91,12 +89,12 @@
 (defun main ()
   (let ((project-path (cadr (command-line))))
 	(run-program "/usr/bin/clear" nil :output *standard-output*)
-	(format t "Welcome to <NAME>~%~%An educational software for computational natural langauge semantics~%Type :help for help, :quit for quit.~%")
-; 	(format t "~%~%Initing parser...")
+	(format t "Welcome to SmallWorld~%~%An educational software for computational natural langauge semantics~%Type :help for help, :quit for quit.~%")
+ 	(format t "~%~%Initing parser...")
 	(init-parser project-path)   
 	(setf *vocab* (funcall *lexicon* :keys))
  	(format t "~%")
-; 	(format t "done~%~%")
+ 	(format t "done~%~%")
 	(let ((input))
 	  (loop
 		(format t "Ready> ")

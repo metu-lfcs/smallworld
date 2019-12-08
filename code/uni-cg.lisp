@@ -19,6 +19,18 @@
 (load "aux.lisp")
 (load "lexicon-parser.lisp")
 
+
+; (defpackage :uni-cg 
+;   (:use :common-lisp)
+;   (:export :parse
+;            :uniq-parses
+;            :init-parser
+;            :sign-sem
+;            :*lexicon*
+; 		   ))
+; 
+; (in-package uni-cg)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;     Signs                    ;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -148,6 +160,7 @@
                    (read instr nil 'eof)))
               ((eq item 'eof) count)
 			  (lex-put (construct-sign item))))))
+
 
 
 (defun construct-sign (lex)
@@ -304,8 +317,8 @@
   (let ((lsem (sign-sem left))
 		(rsem (sign-sem right)))
 	(if (eq dir 'forward)
-	  (lc-q:beta-normalize-inner (lc-q:mk-a lsem rsem))
-	  (lc-q:beta-normalize-inner (lc-q:mk-a rsem lsem)))))
+	  (beta-normalize-inner (mk-a lsem rsem))
+	  (beta-normalize-inner (mk-a rsem lsem)))))
 
 ;;; Composition
 
@@ -337,8 +350,8 @@
   (let ((lsem (sign-sem left))
 		(rsem (sign-sem right)))
 	(if (eq dir 'forward)
-	  (lc-q:beta-normalize-inner (lc-q:mk-a (lc-q:mk-a b-comb lsem) rsem))
-	  (lc-q:beta-normalize-inner (lc-q:mk-a (lc-q:mk-a b-comb rsem) lsem)))))
+	  (beta-normalize-inner (mk-a (mk-a b-comb lsem) rsem))
+	  (beta-normalize-inner (mk-a (mk-a b-comb rsem) lsem)))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -449,7 +462,7 @@
 (defun parse (sentence)
   (mapcar
 	#'(lambda (x)
-		(setf (sign-sem x) (aux:strip-package-deco (funcall (if *eta-normalize* 'lc-q:eta-normalize 'identity) (sign-sem x))))
+		(setf (sign-sem x) (funcall (if *eta-normalize*  'eta-normalize 'identity) (sign-sem x)))
 		x)
 	(mapcan
 	  #'(lambda (x) (sr-parse (list (cons nil x))))
@@ -463,7 +476,7 @@
 ; 			   #'(lambda (x)
 ; 				   (mapcar 
 ; 					 #'(lambda (y)
-; 						 (setf (sign-sem y) (aux:strip-package-deco (lc-q:eta-normalize (sign-sem y))))
+; 						 (setf (sign-sem y) (aux:strip-package-deco (eta-normalize (sign-sem y))))
 ; 						 y)
 ; 					 x)))
 ; 			 (mapcan
@@ -475,7 +488,7 @@
 
 (defun sign-sem-equalp (s1 s2)
   "two signs are semantically equivalent, if their sems are alpha-equivalent"
-  (lc-q::alpha-equivalent (sign-sem s1) (sign-sem s2)))
+  (alpha-equivalent (sign-sem s1) (sign-sem s2)))
 
 (defun uniq-parses (set-of-parses)
   "eliminates semantically superous parses -- see aux.lisp for aux:uniq"

@@ -1,10 +1,15 @@
-; (defpackage :models 
-;   (:use :common-lisp))
-; 
-; (in-package models)
 
 (load "setutils.lisp")
 
+(defpackage :models
+  (:use :common-lisp)
+  (:export :interpret  
+           :generate-model
+           :display-model
+           :refresh-model
+		   ))
+
+(in-package models) 
 
 (setf *random-state* (make-random-state t))
 
@@ -49,10 +54,10 @@
         (names (cdr vocab-item)))
     (if (plusp arity)
       (mapcar 
-        #'(lambda (x) (cons x (generate-tuples *entity-domain* arity)))
+        #'(lambda (x) (cons x (setutils:generate-tuples *entity-domain* arity)))
         names)
       (mapcar 
-        #'(lambda (x) (cons x (random-pick *entity-domain*)))
+        #'(lambda (x) (cons x (setutils:random-pick *entity-domain*)))
         names))))
 
 (defun generate-model ()
@@ -80,7 +85,7 @@
 	  (let ((vocab-item (car item))       ; vocabulary item
 			(interp (cdr item)))         ; set-theoretic interpretation 
 		(if (listp interp)
-		  (setf (gethash vocab-item if-table) (set-to-function interp))
+		  (setf (gethash vocab-item if-table) (setutils:set-to-function interp))
 		  (setf (gethash vocab-item if-table) interp))))
 	(dolist (item *manual-vocabulary* if-table)
 	  (let ((vocab-item (car item))    
