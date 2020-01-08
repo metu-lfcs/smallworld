@@ -60,7 +60,7 @@
   (format t ":gen-model (:gm)		-- generate a random model~%")
   (format t ":show-model (:sm)		-- display the current loaded model~%")
   (format t ":refresh-model (:rm)		-- generate a new random model~%")
-  (format t ":parse (:p) <sentence>	-- parse the provided sentence into an applicative form~%")
+  (format t ":parse (:p) <sentence>	        -- parse the provided sentence into an applicative form~%")
   (format t ":interp-form (:if) <form>	-- interpret the provided applicative form~%")
   (format t ":interp-exp (:is) <expr>	-- parse and interpret the provided expression~%")
   (format t ":show-vocab (:sv)		-- display the vocabulary~%")

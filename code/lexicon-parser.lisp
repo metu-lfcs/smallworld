@@ -101,13 +101,12 @@
 				(#\- '-))
 			  store)))))))
 
-
 (defun parse-sem (sem)
   (labels ((lambda-p (expr)
 					 (and 
 					   (consp expr)
 					   (= (length expr) 3)
-					   (equal (car expr) 'lam)))
+					   (member (car expr) '(lam forall exists))))
 		   (r-adjoin (expr adjunct)
 					 (if (null adjunct)
 					   expr
@@ -120,7 +119,7 @@
 						((= 1 (length sem))
 						 (parse (car sem)))
 						((lambda-p sem)
-						 (list 'lam (cadr sem) (parse (cddr sem))))
+						 (list (car sem) (cadr sem) (parse (cddr sem))))
 						(t
 						  (r-adjoin
 							(list 
@@ -129,6 +128,34 @@
 							(parse (cddr sem)))))))
 	(let ((newsem (aux:translate-string sem '((#\\ . #\!) (#\' . #\Space)))))
 	  (parse (aux:string-to-list newsem)))))
+
+; (defun parse-sem (sem)
+;   (labels ((lambda-p (expr)
+; 					 (and 
+; 					   (consp expr)
+; 					   (= (length expr) 3)
+; 					   (equal (car expr) 'lam)))
+; 		   (r-adjoin (expr adjunct)
+; 					 (if (null adjunct)
+; 					   expr
+; 					   (list expr adjunct)))
+; 		   (parse (sem)
+; 				  (cond ((atom sem)
+; 						 sem)
+; 						((endp sem)
+; 						 nil)
+; 						((= 1 (length sem))
+; 						 (parse (car sem)))
+; 						((lambda-p sem)
+; 						 (list 'lam (cadr sem) (parse (cddr sem))))
+; 						(t
+; 						  (r-adjoin
+; 							(list 
+; 							  (parse (car sem))
+; 							  (parse (cadr sem)))
+; 							(parse (cddr sem)))))))
+; 	(let ((newsem (aux:translate-string sem '((#\\ . #\!) (#\' . #\Space)))))
+; 	  (parse (aux:string-to-list newsem)))))
 
 (defun generate-entry-list ()
   (mapcar 

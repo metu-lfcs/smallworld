@@ -70,6 +70,10 @@
 		((is-a e) (mk-a
 					(eta-normalize (a-get-f e))
 					(eta-normalize (a-get-a e))))
+        ((is-q e) (mk-q
+                    (q-get-q e)
+                    (q-get-v e)
+                    (eta-normalize (q-get-b e))))
 		((is-l e)  (eta-reduce (mk-l 
 								(l-get-v e)
 								(eta-normalize (l-get-b e)))))))

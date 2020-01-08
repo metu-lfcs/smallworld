@@ -414,7 +414,7 @@
   (let ((stack (car state))
 		(tape (cdr state)))
 	(and
-	  (null tape) 
+	  (null tape)
 	  (consp stack)
 	  (null (cdr stack))
 	  (car stack))))
