@@ -1,10 +1,11 @@
-#!/usr/bin/sbcl --script
+;#!/usr/bin/sbcl --script
+
+(declaim (optimize (speed 0) (safety 3) (debug 3)))
 
 (load "models.lisp")
 (load "uni-cg.lisp")
 
-
-(defvar *vocab*)
+(defparameter *vocab* nil)
 
 (defun proc-input (input)
   (case input
@@ -87,7 +88,7 @@
 	nil))
 
 (defun main ()
-  (let ((project-path (cadr (command-line))))
+  (let ((project-path "prj/basic"))
 	(run-program "/usr/bin/clear" nil :output *standard-output*)
 	(format t "Welcome to SmallWorld~%~%An educational software for computational natural langauge semantics~%Type :help for help, :quit for quit.~%")
  	(format t "~%~%Initing parser...")
@@ -95,10 +96,9 @@
 	(setf *vocab* (funcall *lexicon* :keys))
  	(format t "~%")
  	(format t "done~%~%")
-	(let ((input))
-	  (loop
-		(format t "Ready> ")
-		(finish-output)
-		(proc-input (read))))))
+    (loop
+      (format t "Ready> ")
+      (finish-output)
+      (proc-input (read)))))
 
 (main)

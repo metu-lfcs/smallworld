@@ -1,4 +1,3 @@
-
 (set-macro-character #\!
 					 #'(lambda (str chr)
 						 (declare (ignore chr))

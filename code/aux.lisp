@@ -5,6 +5,7 @@
 (defpackage :aux 
   (:use :common-lisp)
   (:export :multiset-table
+           :flip-bool
 		   :uniq
 		   :tsv-to-list
 		   :strip-package-deco
@@ -19,6 +20,9 @@
 		   :replace-char-with-str
 		   :restore-left-assoc
 		   :symbol-starts-with
+           :random-num-with-n-digits
+           :readlist
+           :prompt
 		   ))
 
 (in-package aux)
@@ -32,7 +36,8 @@
    to get, call with just key
    call with :check key to check existence
    call with :count to get count
-   call with :keys to get the list of keys"
+   call with :keys to get the list of keys
+   call with :get-table to get the embedded ht"
   #'(lambda (&rest input)
 	  (let ((head (car input))
 			(tail (cadr input)))
@@ -44,7 +49,7 @@
 					   (declare (ignore v))
 					   (push k store))
 				   ht)
-				 (reverse store)))
+				 (nreverse store)))
 			  ((equal head :check) 
 			   (nth-value 1 (gethash tail ht)))
 			  ((equal head :get-table) ht)
@@ -98,6 +103,16 @@
   (and 
 	(>= (length str) (length prefix))
 	(string-equal prefix (subseq str 0 (length prefix)))))
+
+(defun readlist ()
+  "Graham's On Lisp, p 56"
+  (values (read-from-string
+            (concatenate 'string
+                         "(" (read-line) ")"))))
+(defun prompt (&rest args)
+  "Graham's On Lisp, p 56"
+  (apply #'format *query-io* args)
+  (read *query-io*))
 
 (defun symbol-starts-with (sym chr)
   (char= (char (symbol-name sym) 0) chr))
@@ -191,4 +206,15 @@
   (cond ((endp lst) store)
 		((endp store) (restore-left-assoc (cdr lst) (list (car lst))))
 		(t (restore-left-assoc (cdr lst) (list (list (car store) (car lst)))))))
+
+(defun random-num-with-n-digits (n)
+  (labels ((generate (guess n lowest-num)
+                     (if (> guess lowest-num)
+                       guess
+                       (generate (random n) n lowest-num))))
+    (let ((arg-to-random (expt 10 n))
+          (lowest-num (expt 10 (- n 1))))
+      (setf *random-state* (make-random-state t))
+      (generate (random arg-to-random) arg-to-random lowest-num))))
+
 

@@ -435,29 +435,29 @@
   (if (endp agenda) 
 	store
 	(let* ((state (car agenda)))
-	  (cond ((p-success state)
-			   (sr-parse (cdr agenda)
-						 (cons (caar state) store)))
-			((p-empty-tapep state) ;tape is over
-			 (if (p-reducible-statep state) ; is stack still reducible
-			   (sr-parse                    ; yes, then reduce it
-				 (cons (p-reduce state) (cdr agenda))
-				 store)
-			   (sr-parse (cdr agenda) store))) ; no, discard the curren state and go on
-			((not (p-reducible-statep state)) ; compulsory shift
-			 (sr-parse (cons (p-shift state) (cdr agenda)) store))
-			(t 
-			  (let ((reduct (p-reduce state))
-					(shifted (p-shift state)))
-				(if reduct
-				  (sr-parse (cons 
-							  reduct
-							  (cons shifted (cdr agenda)))
-							store)
-				  (sr-parse (cons
-							  shifted
-							  (cdr agenda))
-							store))))))))
+      (cond ((p-success state)
+             (sr-parse (cdr agenda)
+                       (cons (caar state) store)))
+            ((p-empty-tapep state) ;tape is over
+             (if (p-reducible-statep state) ; is stack still reducible
+               (sr-parse                    ; yes, then reduce it
+                 (cons (p-reduce state) (cdr agenda))
+                 store)
+               (sr-parse (cdr agenda) store))) ; no, discard the curren state and go on
+            ((not (p-reducible-statep state)) ; compulsory shift
+             (sr-parse (cons (p-shift state) (cdr agenda)) store))
+            (t 
+              (let ((reduct (p-reduce state))
+                    (shifted (p-shift state)))
+                (if reduct
+                  (sr-parse (cons 
+                              reduct
+                              (cons shifted (cdr agenda)))
+                            store)
+                  (sr-parse (cons
+                              shifted
+                              (cdr agenda))
+                            store))))))))
 
 (defun parse (sentence)
   (mapcar
