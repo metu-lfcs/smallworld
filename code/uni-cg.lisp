@@ -501,7 +501,7 @@
 
 (defun init-parser (project-path)
 ;   (setf *vocabulary-path* (make-pathname :name (concatenate 'string project-path "/vocabulary.tsv")))
-  (setf *lexicon-path* (make-pathname :name (concatenate 'string project-path "/_lexicon.lisp")))
+(setf *lexicon-path* (aux:make-pathname-from-strings project-path "/_lexicon.lisp" ))
 ;   (setf *lexical-rules-path* (make-pathname :name (concatenate 'string project-path "/lexical-rules.lisp")))
 ;   (run-program (string-trim '(#\newline)
 ; 							(with-output-to-string (out)

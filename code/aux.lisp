@@ -23,6 +23,7 @@
            :random-num-with-n-digits
            :readlist
            :prompt
+           :make-pathname-from-strngs
 		   ))
 
 (in-package aux)
@@ -122,12 +123,19 @@
 	(stringp str)
 	(zerop (length str))))
 
+(defun make-pathname-from-strings (&rest strings)
+ (make-pathname :name (apply
+                        #'concatenate 'string strings)))
+
 (defun read-from-file (pathname)
   "return a list of lisp objects in the file at the pathname object"
   (with-open-file (str pathname :direction :input)
 	(do ((x (read str nil :eof) (read str nil :eof))
 		 (store nil (cons x store)))
 	  ((eq x :eof) (reverse store)))))
+
+
+
 
 (defun string-to-list (str)
   " \"a b c\" => (a b c)"
