@@ -286,13 +286,13 @@
   (in-package :lexicon-parser)
   "first read the theory"
   (format t "~%Reading the theory found at ~a . . .~%"
-          (pathname-name (setf *theory-file-path* (aux:make-pathname-from-strings project-path "/theory.lisp"))))
+          (pathname-name (setf *theory-file-path* (aux:string-to-pathname project-path "/theory.lisp"))))
   (setf *theory* (aux:read-from-file *theory-file-path*))
   (setf *base-cat-template* (cadr (assoc 'base-cat-template *theory*)))
   (setf *feature-dictionary* (cdr (assoc 'feature-dictionary *theory*)))
   (setf *category-bundle-symbols* (cdr (assoc 'category-bundle-symbols *theory*)))
   (format t "~%Parsing the lexicon found at ~a . . .~%"
-          (pathname-name (setf *lexicon-file-path* (aux:make-pathname-from-strings project-path "/lexicon.lisp"))))
+          (pathname-name (setf *lexicon-file-path* (aux:string-to-pathname project-path "/lexicon.lisp"))))
   "then add items to the lalr *lexicon* on the basis of *feature-dictionary*"
   (dolist (x *feature-dictionary*)
 	(dolist (y (cdr x))
@@ -302,7 +302,7 @@
   (dolist (x *category-bundle-symbols*)
 	(push (list (car x) 'acat) *lexicon*))
   "set the path for the debug lexicon, deleting any older version -- this will be read by uni-cg module"
-  (setf *debug-lexicon-path* (aux:make-pathname-from-strings project-path "/_lexicon.lisp" ))
+  (setf *debug-lexicon-path* (aux:string-to-pathname project-path "/_lexicon.lisp" ))
   (if (probe-file *debug-lexicon-path*)
 	(delete-file *debug-lexicon-path*))
   (proc-entries

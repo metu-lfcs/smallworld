@@ -39,7 +39,7 @@
   (let* ((filename (or fname (read-line)))
 		 (sentences (aux:tsv-to-list
 					  (make-pathname :name filename)))
-         (outpath (aux:make-pathname-from-strings filename ".out")))
+         (outpath (aux:string-to-pathname filename ".out")))
 	(with-open-file (str outpath :direction :output 
 						 :if-does-not-exist :create
 						 :if-exists :overwrite)

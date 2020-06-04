@@ -123,7 +123,7 @@
 	(stringp str)
 	(zerop (length str))))
 
-(defun make-pathname-from-strings (&rest strings)
+(defun string-to-pathname (&rest strings)
  (make-pathname :name (apply
                         #'concatenate 'string strings)))
 
